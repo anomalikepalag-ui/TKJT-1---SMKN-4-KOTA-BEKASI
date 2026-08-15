@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>X TJKT 1 — SMKN 4 Kota Bekasi</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#F3F6F4;
+    --panel:#FFFFFF;
+    --panel-soft:#EDF3EF;
+    --ink:#0E1B15;
+    --ink-2:#5B6B62;
+    --line:#DEE7E1;
+    --signal:#16A34A;
+    --signal-2:#0D9467;
+    --signal-soft:#DCFCE7;
+    --amber:#C2760C;
+    --amber-soft:#FBEBCF;
+    --mono-ink:#0F766E;
+    --shadow:0 14px 34px rgba(14,27,21,.07);
+    --shadow-lg:0 24px 60px rgba(14,27,21,.14);
+    --radius:20px;
+    --font-d:'Sora',sans-serif;
+    --font-b:'Plus Jakarta Sans',sans-serif;
+    --font-m:'JetBrains Mono',monospace;
+    color-scheme: light;
+  }
+  [data-theme="dark"]{
+    --bg:#0A1310;
+    --panel:#101C18;
+    --panel-soft:#152521;
+    --ink:#E7F3EC;
+    --ink-2:#8CA79B;
+    --line:#20322B;
+    --signal:#34D399;
+    --signal-2:#10B981;
+    --signal-soft:#0F2E24;
+    --amber:#FBBF24;
+    --amber-soft:#2B2410;
+    --mono-ink:#5EEAD4;
+    --shadow:0 14px 34px rgba(0,0,0,.45);
+    --shadow-lg:0 24px 60px rgba(0,0,0,.55);
+    color-scheme: dark;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:var(--font-b);
+    background:var(--bg);
+    color:var(--ink);
+    padding-top:96px;
+    padding-bottom:4rem;
+    display:flex;flex-direction:column;align-items:center;gap:4.5rem;
+    overflow-x:hidden;
+    transition:background .4s ease, color .4s ease;
+    background-image:
+      radial-gradient(circle at 1px 1px, var(--line) 1px, transparent 0);
+    background-size: 28px 28px;
+  }
+  ::selection{ background:var(--signal); color:#fff; }
+  a{color:inherit;}
+
+  /* ===== BOOT OVERLAY ===== */
+  #boot{
+    position:fixed;inset:0;z-index:5000;background:#081310;color:#6EE7B7;
+    font-family:var(--font-m);display:flex;flex-direction:column;
+    justify-content:center;align-items:flex-start;
+    padding:8vw;gap:.5rem;font-size:clamp(.8rem,2vw,1.05rem);
+    cursor:pointer;
+  }
+  #boot .line{opacity:0;display:flex;gap:.6rem;align-items:baseline;}
+  #boot .ok{color:#6EE7B7;font-weight:700;}
+  #boot .cursor{display:inline-block;width:9px;height:1.1em;background:#6EE7B7;animation:blink 1s steps(1) infinite;}
+  #boot .hint{margin-top:1.4rem;color:#3f5a51;font-size:.75rem;}
+  @keyframes blink{50%{opacity:0;}}
+  #boot.fade{opacity:0;pointer-events:none;transition:opacity .5s ease;}
+  body.no-scroll{overflow:hidden;}
+
+  /* ===== SCROLL PROGRESS ===== */
+  #progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--signal),var(--mono-ink));z-index:1200;width:0%;transition:width .1s linear;}
+
+  .container{width:100%;max-width:1180px;padding:0 2rem;scroll-margin-top:112px;}
+
+  .eyebrow{
+    font-family:var(--font-m);font-size:.72rem;letter-spacing:.14em;
+    color:var(--signal-2);text-transform:uppercase;font-weight:600;
+    display:flex;align-items:center;gap:.5rem;justify-content:center;margin-bottom:.6rem;
+  }
+  .eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--signal);box-shadow:0 0 0 4px var(--signal-soft);}
+
+  h2.section-title{
+    font-family:var(--font-d);font-weight:800;letter-spacing:-.02em;
+    font-size:clamp(1.7rem,3vw,2.3rem);text-align:center;margin-bottom:2.2rem;
+  }
+
+  /* ===== NAVBAR ===== */
+  .navbar{
+    position:fixed;top:0;left:0;width:100%;z-index:1000;
+    background:color-mix(in srgb, var(--panel) 82%, transparent);
+    backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);padding:14px 0;
+  }
+  .nav-container{max-width:1180px;margin:0 auto;padding:0 2rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;}
+  .nav-left{display:flex;align-items:center;gap:.7rem;}
+  .nav-dot{width:10px;height:10px;border-radius:50%;background:var(--signal);box-shadow:0 0 0 4px var(--signal-soft);animation:pulse-dot 2s ease-in-out infinite;}
+  @keyframes pulse-dot{0%,100%{opacity:1;}50%{opacity:.35;}}
+  .nav-brand{font-family:var(--font-d);font-weight:800;font-size:1.05rem;letter-spacing:-.01em;text-decoration:none;}
+  .nav-brand small{display:block;font-family:var(--font-m);font-weight:500;font-size:.65rem;color:var(--ink-2);letter-spacing:.05em;}
+  .nav-right{display:flex;align-items:center;gap:10px;}
+  .clock{font-family:var(--font-m);font-size:.78rem;color:var(--ink-2);display:none;}
+  @media(min-width:640px){.clock{display:block;}}
+
+  .icon-btn{
+    width:40px;height:40px;border-radius:50%;border:1px solid var(--line);
+    background:var(--panel-soft);cursor:pointer;font-size:1rem;
+    display:flex;align-items:center;justify-content:center;transition:.25s;
+  }
+  .icon-btn:hover{border-color:var(--signal);transform:translateY(-1px);}
+
+  .menu-dropdown{position:relative;}
+  .menu-toggle-btn{
+    background:var(--signal);color:#fff;border:none;padding:10px 18px;border-radius:50px;
+    font-size:.85rem;font-weight:700;font-family:var(--font-b);cursor:pointer;
+    display:flex;align-items:center;gap:8px;transition:.25s;box-shadow:0 6px 16px rgba(22,163,74,.25);
+  }
+  .menu-toggle-btn:hover{background:var(--signal-2);transform:translateY(-1px);}
+  .dropdown-content{
+    display:none;position:absolute;right:0;top:130%;background:var(--panel);
+    min-width:250px;box-shadow:var(--shadow-lg);border-radius:16px;border:1px solid var(--line);
+    padding:8px;z-index:1001;
+  }
+  .dropdown-content.show{display:block;animation:fadeIn .2s cubic-bezier(.16,1,.3,1);}
+  .dropdown-item{
+    color:var(--ink);padding:11px 14px;text-decoration:none;display:flex;gap:10px;
+    border-radius:10px;font-size:.87rem;font-weight:600;
+  }
+  .dropdown-item:hover{background:var(--signal-soft);color:var(--signal-2);}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
+
+  /* ===== HERO ===== */
+  header.hero{
+    text-align:center;padding:70px 30px 54px;border-radius:28px;color:#EAFBF2;
+    position:relative;overflow:hidden;
+    background:
+      linear-gradient(180deg, rgba(6,15,12,.72), rgba(6,15,12,.88)),
+      url('https://lh3.googleusercontent.com/d/1ilCethFJAfnHgq2UJqP-XW8Q8CQz6DzC') center/cover no-repeat;
+    box-shadow:var(--shadow-lg);
+  }
+  .topo-lines{position:absolute;inset:0;opacity:.25;pointer-events:none;}
+  .logos-wrapper{display:flex;justify-content:center;align-items:center;gap:18px;margin-bottom:22px;position:relative;z-index:1;}
+  .header-logo{width:82px;height:82px;object-fit:contain;background:rgba(255,255,255,.96);padding:8px;border-radius:50%;border:3px solid #fff;box-shadow:0 8px 20px rgba(0,0,0,.2);}
+  header.hero h1{font-family:var(--font-d);font-size:clamp(1.9rem,4vw,2.9rem);font-weight:800;margin-bottom:6px;letter-spacing:-.02em;position:relative;z-index:1;}
+  .subtitle-badge{
+    position:relative;z-index:1;display:inline-flex;align-items:center;gap:8px;
+    font-family:var(--font-m);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;
+    color:#A7F3D0;background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.3);
+    padding:7px 16px;border-radius:50px;margin-top:6px;
+  }
+  .welcome-banner{position:relative;z-index:1;margin-top:26px;background:rgba(255,255,255,.06);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.15);padding:26px;border-radius:20px;max-width:700px;margin-inline:auto;}
+  .welcome-banner p{font-size:clamp(.92rem,1.5vw,1.05rem);line-height:1.7;font-weight:500;color:#EAFBF2;}
+  .welcome-banner .tagline{display:inline-block;margin-top:16px;background:rgba(255,255,255,.1);padding:9px 18px;border-radius:50px;font-family:var(--font-m);font-size:.8rem;font-weight:600;color:#FDE68A;border:1px solid rgba(255,255,255,.2);}
+
+  /* stat strip */
+  .stat-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:34px;position:relative;z-index:1;}
+  .stat-box{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:16px 10px;}
+  .stat-num{font-family:var(--font-m);font-weight:700;font-size:clamp(1.3rem,3vw,1.8rem);color:#6EE7B7;}
+  .stat-label{font-size:.7rem;color:#CFE9DC;text-transform:uppercase;letter-spacing:.06em;margin-top:2px;}
+  @media(max-width:640px){.stat-strip{grid-template-columns:repeat(2,1fr);}}
+
+  /* ===== SEARCH ===== */
+  .search-section{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);}
+  .search-row{display:flex;align-items:center;gap:12px;background:var(--panel-soft);border:2px solid var(--line);border-radius:14px;padding:4px 16px;transition:.25s;}
+  .search-row:focus-within{border-color:var(--signal);box-shadow:0 0 0 4px var(--signal-soft);}
+  .search-prompt{font-family:var(--font-m);color:var(--signal-2);font-weight:700;}
+  .search-input{flex:1;border:none;background:transparent;outline:none;padding:13px 0;font-size:.95rem;font-weight:600;color:var(--ink);font-family:var(--font-m);}
+  .search-input::placeholder{color:var(--ink-2);font-weight:500;}
+  #searchCount{font-family:var(--font-m);font-size:.72rem;color:var(--ink-2);white-space:nowrap;}
+
+  /* ===== PENGUMUMAN ===== */
+  .pengumuman-card{
+    position:relative;background:linear-gradient(135deg,var(--signal-soft),var(--panel));
+    border:1px solid var(--line);border-left:4px solid var(--signal);border-radius:var(--radius);
+    padding:30px 34px;box-shadow:var(--shadow);max-width:820px;margin:0 auto;
+    display:flex;gap:18px;align-items:flex-start;
+  }
+  .pengumuman-icon{
+    flex-shrink:0;width:48px;height:48px;border-radius:14px;background:var(--signal);
+    display:flex;align-items:center;justify-content:center;font-size:1.4rem;box-shadow:0 8px 18px var(--signal-soft);
+  }
+  .pengumuman-card h3{font-family:var(--font-d);font-size:1.05rem;margin-bottom:8px;}
+  .pengumuman-card p{font-size:.92rem;line-height:1.75;color:var(--ink-2);}
+  .pengumuman-tag{
+    display:inline-block;margin-top:12px;font-family:var(--font-m);font-size:.68rem;
+    color:var(--signal-2);letter-spacing:.06em;text-transform:uppercase;
+  }
+
+  /* ===== ALBUM ===== */
+  .album-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;}
+  .album-item{
+    position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--line);
+    box-shadow:var(--shadow);cursor:zoom-in;aspect-ratio:4/3;background:var(--panel-soft);
+  }
+  .album-item img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s ease;}
+  .album-item:hover img{transform:scale(1.08);}
+  .album-overlay{
+    position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(6,15,12,.75));
+    display:flex;align-items:flex-end;padding:12px;opacity:0;transition:opacity .3s ease;
+  }
+  .album-item:hover .album-overlay{opacity:1;}
+  .album-overlay span{font-family:var(--font-m);color:#EAFBF2;font-size:.72rem;font-weight:600;}
+
+  .lightbox-overlay{position:fixed;inset:0;background:rgba(6,15,12,.85);backdrop-filter:blur(6px);z-index:2100;display:none;align-items:center;justify-content:center;padding:24px;}
+  .lightbox-overlay.show{display:flex;animation:fadeIn .2s ease;}
+  .lightbox-overlay img{max-width:min(90vw,780px);max-height:82vh;border-radius:16px;box-shadow:var(--shadow-lg);}
+  .lightbox-close{position:absolute;top:24px;right:28px;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);color:#fff;font-size:1.1rem;cursor:pointer;}
+
+  /* ===== KEGIATAN KELAS (multi-kategori) ===== */
+  .kegiatan-tabs{display:flex;gap:10px;justify-content:center;margin-bottom:1.8rem;flex-wrap:wrap;}
+  .kegiatan-tab{
+    font-family:var(--font-m);font-size:.78rem;font-weight:700;padding:10px 20px;border-radius:50px;
+    border:1px solid var(--line);background:var(--panel);cursor:pointer;transition:.2s;color:var(--ink-2);
+  }
+  .kegiatan-tab.active{border-color:var(--signal);color:var(--signal-2);background:var(--signal-soft);}
+  .kegiatan-panel{display:none;}
+  .kegiatan-panel.active{display:block;animation:fadeIn .3s ease;}
+  .album-placeholder{
+    grid-column:1/-1;text-align:center;padding:50px 24px;border:1.5px dashed var(--line);
+    border-radius:16px;color:var(--ink-2);font-family:var(--font-m);font-size:.82rem;line-height:1.8;
+  }
+
+  /* ===== VISI MISI ===== */
+  .visi-card{
+    max-width:760px;margin:0 auto 26px;background:var(--panel);border:1px solid var(--line);
+    border-radius:var(--radius);padding:32px 36px;box-shadow:var(--shadow);text-align:center;
+    border-top:4px solid var(--signal);
+  }
+  .visi-label{font-family:var(--font-m);font-size:.7rem;letter-spacing:.14em;color:var(--signal-2);text-transform:uppercase;font-weight:700;margin-bottom:10px;}
+  .visi-text{font-family:var(--font-d);font-size:clamp(1.05rem,2vw,1.3rem);font-weight:700;line-height:1.6;color:var(--ink);font-style:italic;}
+
+  .misi-grid{max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:12px;}
+  .misi-item{
+    display:flex;align-items:flex-start;gap:16px;background:var(--panel);border:1px solid var(--line);
+    border-radius:16px;padding:18px 20px;box-shadow:var(--shadow);transition:.25s;
+  }
+  .misi-item:hover{border-color:var(--signal);transform:translateX(4px);}
+  .misi-num{
+    flex-shrink:0;width:34px;height:34px;border-radius:10px;background:var(--signal-soft);color:var(--signal-2);
+    font-family:var(--font-m);font-weight:800;font-size:.85rem;display:flex;align-items:center;justify-content:center;
+  }
+  .misi-item p{font-size:.9rem;line-height:1.65;color:var(--ink-2);padding-top:4px;}
+
+  /* ===== INFORMASI KELAS ===== */
+  .info-logos{display:flex;justify-content:center;gap:22px;margin-bottom:28px;flex-wrap:wrap;}
+  .info-logo-box{text-align:center;}
+  .info-logo-box img{
+    width:88px;height:88px;object-fit:contain;background:var(--panel);padding:10px;
+    border-radius:50%;border:2px solid var(--line);box-shadow:var(--shadow);
+  }
+  .info-logo-box span{display:block;margin-top:8px;font-family:var(--font-m);font-size:.68rem;color:var(--ink-2);text-transform:uppercase;letter-spacing:.05em;}
+
+  .info-grid{max-width:760px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;}
+  .info-item{
+    display:flex;align-items:flex-start;gap:14px;background:var(--panel);border:1px solid var(--line);
+    border-radius:16px;padding:16px 18px;box-shadow:var(--shadow);transition:.25s;
+  }
+  .info-item:hover{border-color:var(--signal);transform:translateY(-3px);}
+  .info-icon{
+    flex-shrink:0;width:38px;height:38px;border-radius:11px;background:var(--signal-soft);
+    display:flex;align-items:center;justify-content:center;font-size:1.05rem;
+  }
+  .info-item .info-label{font-family:var(--font-m);font-size:.66rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-2);margin-bottom:3px;}
+  .info-item .info-value{font-size:.86rem;font-weight:600;line-height:1.5;word-break:break-word;}
+  .info-item .info-value a{color:var(--signal-2);text-decoration:none;}
+  .info-item .info-value a:hover{text-decoration:underline;}
+  .info-value.muted{color:var(--ink-2);font-weight:500;font-style:italic;}
+
+  /* ===== FAREWELL CARD ===== */
+  .farewell-card{
+    position:relative;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    padding:44px 40px 34px;box-shadow:var(--shadow);max-width:760px;margin:0 auto;
+    border-left:4px solid var(--amber);
+  }
+  .farewell-quote-mark{
+    position:absolute;top:6px;left:26px;font-family:var(--font-d);font-size:4.5rem;
+    color:var(--amber-soft);font-weight:800;line-height:1;user-select:none;
+  }
+  .farewell-card p{position:relative;font-size:.98rem;line-height:1.85;color:var(--ink-2);margin-bottom:16px;}
+  .farewell-card p:last-of-type{margin-bottom:0;}
+  .farewell-signoff{
+    margin-top:22px;padding-top:20px;border-top:1px dashed var(--line);
+    font-family:var(--font-d);font-weight:700;font-size:1.05rem;color:var(--ink);
+  }
+  .farewell-status{
+    margin-top:16px;display:flex;align-items:center;gap:10px;
+    font-family:var(--font-m);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--amber);
+  }
+
+  /* ===== STRUKTUR / TOPOLOGY ===== */
+  .mindmap-container{background:var(--panel);padding:50px 26px;border-radius:var(--radius);border:1px solid var(--line);box-shadow:var(--shadow);display:flex;flex-direction:column;align-items:center;gap:0;}
+  .node{
+    background:var(--panel);border:2px solid var(--line);border-radius:18px;padding:18px 22px;
+    display:flex;flex-direction:column;align-items:center;gap:10px;min-width:210px;
+    box-shadow:var(--shadow);transition:.3s; cursor:default; position:relative;
+  }
+  .node:hover{transform:translateY(-4px);border-color:var(--signal);}
+  .avatar-img{width:68px;height:68px;border-radius:50%;border:2px solid var(--signal);object-fit:cover;}
+  .node-status{position:absolute;top:12px;right:12px;width:9px;height:9px;border-radius:50%;background:var(--signal);box-shadow:0 0 0 3px var(--signal-soft);animation:pulse-dot 2.4s ease-in-out infinite;}
+  .node-title{font-family:var(--font-m);font-size:.68rem;color:var(--signal-2);font-weight:700;text-transform:uppercase;letter-spacing:.07em;}
+  .node-name{font-size:.9rem;font-weight:700;text-align:center;line-height:1.4;}
+
+  .connector{position:relative;width:3px;height:38px;background:var(--line);}
+  .connector::after{
+    content:"";position:absolute;left:-2.5px;top:0;width:8px;height:8px;border-radius:50%;
+    background:var(--signal);box-shadow:0 0 8px var(--signal);
+    animation:travel 2.2s linear infinite;
+  }
+  @keyframes travel{0%{top:-8px;opacity:0;}10%{opacity:1;}90%{opacity:1;}100%{top:100%;opacity:0;}}
+
+  .tree-row{display:flex;justify-content:center;gap:2rem;width:100%;flex-wrap:wrap;position:relative;}
+  .tree-row::before{
+    content:"";position:absolute;top:-1px;left:50%;
+  }
+
+  /* ===== SISWA GRID ===== */
+  .filter-bar{display:flex;gap:10px;justify-content:center;margin-bottom:1.6rem;flex-wrap:wrap;}
+  .filter-chip{
+    font-family:var(--font-m);font-size:.78rem;font-weight:600;padding:9px 18px;border-radius:50px;
+    border:1px solid var(--line);background:var(--panel);cursor:pointer;transition:.2s;color:var(--ink-2);
+  }
+  .filter-chip.active,.filter-chip:hover{border-color:var(--signal);color:var(--signal-2);background:var(--signal-soft);}
+
+  .siswa-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:18px;}
+  .siswa-card{
+    background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px 14px;
+    display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;
+    transition:all .3s cubic-bezier(.16,1,.3,1);cursor:pointer;position:relative;
+  }
+  .siswa-card:hover{transform:translateY(-6px);border-color:var(--signal);box-shadow:var(--shadow-lg);}
+  .siswa-card .avatar-img{width:60px;height:60px;}
+  .absen-badge{font-family:var(--font-m);background:linear-gradient(135deg,var(--signal),var(--signal-2));color:#fff;font-size:.68rem;font-weight:700;padding:5px 11px;border-radius:20px;}
+  .student-name{font-size:.86rem;font-weight:700;line-height:1.4;}
+  .gender-tag{font-family:var(--font-m);font-size:.68rem;font-weight:600;color:var(--ink-2);}
+  mark{background:var(--amber-soft);color:var(--amber);border-radius:3px;padding:0 2px;}
+
+  /* ===== MODAL ===== */
+  .modal-overlay{position:fixed;inset:0;background:rgba(6,15,12,.65);backdrop-filter:blur(4px);z-index:2000;display:none;align-items:center;justify-content:center;padding:20px;}
+  .modal-overlay.show{display:flex;animation:fadeIn .2s ease;}
+  .modal-card{background:var(--panel);border-radius:22px;padding:32px;max-width:340px;width:100%;text-align:center;box-shadow:var(--shadow-lg);border:1px solid var(--line);position:relative;}
+  .modal-close{position:absolute;top:14px;right:14px;background:var(--panel-soft);border:1px solid var(--line);border-radius:50%;width:32px;height:32px;cursor:pointer;font-size:.9rem;}
+  .modal-card .avatar-img{width:88px;height:88px;margin-bottom:12px;}
+  .modal-card h3{font-family:var(--font-d);font-size:1.15rem;margin-bottom:14px;}
+  .modal-meta{display:flex;flex-direction:column;gap:8px;text-align:left;background:var(--panel-soft);border-radius:14px;padding:14px 16px;font-family:var(--font-m);font-size:.8rem;}
+  .modal-meta div{display:flex;justify-content:space-between;color:var(--ink-2);}
+  .modal-meta div b{color:var(--ink);font-weight:600;}
+
+  /* ===== PIKET ===== */
+  .piket-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px;}
+  .piket-card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:22px 18px;display:flex;flex-direction:column;align-items:center;transition:.3s;position:relative;}
+  .piket-card:hover{transform:translateY(-4px);box-shadow:var(--shadow);}
+  .piket-card.today{border-color:var(--amber);box-shadow:0 0 0 4px var(--amber-soft);}
+  .today-flag{position:absolute;top:-10px;background:var(--amber);color:#fff;font-family:var(--font-m);font-size:.62rem;font-weight:700;padding:4px 10px;border-radius:20px;letter-spacing:.05em;}
+  .piket-day{background:linear-gradient(135deg,var(--signal),var(--signal-2));color:#fff;padding:7px 16px;border-radius:20px;font-size:.8rem;font-weight:800;margin-bottom:14px;text-transform:uppercase;letter-spacing:.05em;font-family:var(--font-m);}
+  .piket-members{list-style:none;width:100%;display:flex;flex-direction:column;gap:10px;}
+  .piket-member-item{display:flex;align-items:center;gap:10px;font-size:.87rem;font-weight:700;}
+  .dot-icon{width:7px;height:7px;border-radius:50%;background:var(--signal);flex-shrink:0;}
+  .seragam-note{
+    margin-top:14px;padding-top:12px;border-top:1px dashed var(--line);
+    font-size:.74rem;line-height:1.6;color:var(--ink-2);text-align:left;
+  }
+
+  /* ===== JADWAL PELAJARAN ===== */
+  .jadwal-table{min-width:900px;}
+  .jadwal-table th{background:var(--panel-soft);font-family:var(--font-m);font-size:.62rem;padding:8px 4px;line-height:1.4;white-space:nowrap;cursor:default;}
+  .jadwal-table th small{display:block;font-weight:500;color:var(--ink-2);font-size:.62rem;margin-top:2px;}
+  .jadwal-table td{padding:0;border:1px solid var(--line);vertical-align:middle;text-align:center;}
+  .jadwal-hari{
+    color:#fff;font-family:var(--font-m);font-weight:800;letter-spacing:.1em;
+    font-size:.72rem;padding:10px 6px;writing-mode:vertical-rl;text-orientation:mixed;
+  }
+  .hari-senin{background:#DC2626;}
+  .hari-selasa{background:#16A34A;}
+  .hari-rabu{background:#0891B2;}
+  .hari-kamis{background:#EA580C;}
+  .hari-jumat{background:#475569;}
+  .jadwal-isi{padding:8px 6px;min-height:70px;display:flex;flex-direction:column;justify-content:center;gap:4px;}
+  .jadwal-guru{font-size:.72rem;font-weight:600;color:var(--amber);}
+  .jadwal-mapel{font-family:var(--font-d);font-weight:800;font-size:1.05rem;letter-spacing:-.01em;}
+  .jadwal-kosong{background:var(--panel);}
+  .istirahat-box{display:flex;flex-wrap:wrap;gap:12px;margin-top:16px;}
+  .istirahat-chip{
+    display:flex;align-items:center;gap:10px;background:var(--amber-soft);border:1px solid var(--line);
+    border-radius:14px;padding:10px 16px;font-family:var(--font-m);font-size:.78rem;color:var(--ink);
+  }
+  .istirahat-chip b{color:var(--amber);}
+
+  /* ===== TABLE ===== */
+  .table-wrapper{background:var(--panel);border-radius:var(--radius);overflow-x:auto;border:1px solid var(--line);box-shadow:var(--shadow);}
+  table{width:100%;border-collapse:collapse;text-align:left;min-width:680px;}
+  th{background:var(--panel-soft);color:var(--ink);font-weight:700;padding:15px 18px;font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;font-family:var(--font-m);border-bottom:2px solid var(--line);cursor:pointer;user-select:none;white-space:nowrap;}
+  th:hover{color:var(--signal-2);}
+  th .arrow{opacity:.4;margin-left:4px;font-size:.65rem;}
+  th.sorted .arrow{opacity:1;color:var(--signal);}
+  td{padding:14px 18px;border-bottom:1px solid var(--line);font-size:.88rem;}
+  tr:last-child td{border-bottom:none;}
+  tr:hover{background:var(--panel-soft);}
+  .mapel-name{display:flex;align-items:center;gap:10px;}
+  .pj-list{display:flex;flex-direction:column;gap:7px;}
+  .pj-item{display:flex;align-items:center;gap:9px;font-weight:600;color:var(--signal-2);font-size:.85rem;}
+  .pj-avatar{width:6px;height:6px;border-radius:50%;background:var(--signal);flex-shrink:0;}
+  #tableCount{font-family:var(--font-m);font-size:.75rem;color:var(--ink-2);text-align:right;padding:10px 18px;}
+
+  .animate-on-scroll{opacity:0;transform:translateY(28px);transition:opacity .6s cubic-bezier(.16,1,.3,1),transform .6s cubic-bezier(.16,1,.3,1);}
+  .animate-on-scroll.active{opacity:1;transform:translateY(0);}
+
+  footer{text-align:center;padding:26px 20px;color:var(--ink-2);font-size:.85rem;font-weight:600;font-family:var(--font-m);}
+  .no-result{text-align:center;padding:40px;color:var(--ink-2);font-family:var(--font-m);font-size:.85rem;display:none;}
+</style>
+</head>
+<body class="no-scroll">
+
+<div id="progress"></div>
+
+<!-- BOOT SEQUENCE -->
+<div id="boot">
+  <div id="bootLines"></div>
+  <div class="hint">klik di mana saja untuk melewati &raquo;</div>
+</div>
+
+<nav class="navbar">
+  <div class="nav-container">
+    <div class="nav-left">
+      <span class="nav-dot"></span>
+      <a href="#hero" class="nav-brand">X TJKT 1<small>SMKN 4 KOTA BEKASI</small></a>
+    </div>
+    <div class="nav-right">
+      <span class="clock" id="liveClock">--:--:--</span>
+      <button class="icon-btn" id="themeToggle" title="Ganti tema">🌙</button>
+      <div class="menu-dropdown">
+        <button class="menu-toggle-btn" id="menuBtn">☰ Menu</button>
+        <div class="dropdown-content" id="dropdownMenu">
+          <a href="#hero" class="dropdown-item">🏠 Beranda</a>
+          <a href="#pengumuman" class="dropdown-item">📢 Pengumuman</a>
+          <a href="#album" class="dropdown-item">📸 Album Kelas</a>
+          <a href="#kegiatan-kelas" class="dropdown-item">🎉 Galeri Kegiatan Kelas</a>
+          <a href="#pesan-perpisahan" class="dropdown-item">✨ Pesan Perpisahan</a>
+          <a href="#visi-misi" class="dropdown-item">🎯 Visi & Misi</a>
+          <a href="#struktur" class="dropdown-item">🗺️ Struktur Organisasi</a>
+          <a href="#daftar-siswa" class="dropdown-item">📖 Daftar Siswa Kelas</a>
+          <a href="#pj-piket" class="dropdown-item">📅 PJ Piket</a>
+          <a href="#piket-kebersihan" class="dropdown-item">🧹 Piket Kebersihan</a>
+          <a href="#seragam" class="dropdown-item">👔 Jadwal Seragam</a>
+          <a href="https://drive.google.com/drive/folders/1i02uJv4Ytla8GxxcgE4NrI0cgPIsaBin?usp=drive_link" target="_blank" class="dropdown-item">📁 Dokumentasi Piket</a>
+          <a href="#jadwal-pelajaran" class="dropdown-item">🗓️ Jadwal Pelajaran</a>
+          <a href="#pj-mapel" class="dropdown-item">📚 PJ Mapel</a>
+          <a href="#informasi" class="dropdown-item">ℹ️ Informasi</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main style="display:contents;">
+
+  <section id="hero" class="container animate-on-scroll">
+    <header class="hero">
+      <div class="logos-wrapper">
+        <img src="https://lh3.googleusercontent.com/d/1BOu2MCm1vnVpctVd5Om1r1avHVjFb2e_" class="header-logo" alt="Logo SMKN 4 Bekasi">
+        <img src="https://lh3.googleusercontent.com/d/1hi-AdPjbZq4VKj9hDjVUeBgO7fttrwgm" class="header-logo" alt="Logo Kelas X TJKT 1">
+      </div>
+      <h1>Selamat Datang di X TJKT 1</h1>
+      <span class="subtitle-badge">● status jaringan: online</span>
+
+      <div class="welcome-banner">
+        <p>Tempat berkumpulnya anak-anak hebat yang gak cuma jago jaringan &amp; IT, tapi juga solid dalam kebersamaan. Cek struktur kelas, piket, hingga PJ mata pelajaran di sini.</p>
+        <div class="tagline">⚡ Satu Kabel, Sejuta Koneksi — Welcome to Our Base 🚀</div>
+      </div>
+
+    </header>
+  </section>
+
+  <section id="pengumuman" class="container animate-on-scroll">
+    <div class="eyebrow">info penting</div>
+    <h2 class="section-title">Pengumuman</h2>
+    <div class="pengumuman-card">
+      <div class="pengumuman-icon">📢</div>
+      <div>
+        <h3>Selamat Datang di Web Resmi Kelas X TJKT 1!</h3>
+        <p>Halaman ini akan jadi pusat informasi kelas kita — mulai dari struktur organisasi, jadwal pelajaran, jadwal piket, sampai PJ mata pelajaran. Pantau terus halaman ini biar nggak ketinggalan info penting seputar kelas. Jangan lupa juga scroll ke bawah buat lihat Album Kelas kita, ya! 🚀</p>
+        <span class="pengumuman-tag">— dari admin kelas X TJKT 1</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="album" class="container animate-on-scroll">
+    <div class="eyebrow">kenangan hari pertama</div>
+    <h2 class="section-title">Album Kelas X TJKT 1</h2>
+    <div class="album-grid" id="albumGrid"></div>
+  </section>
+
+  <section id="kegiatan-kelas" class="container animate-on-scroll">
+    <div class="eyebrow">dokumentasi kelas</div>
+    <h2 class="section-title">Galeri Kegiatan Kelas</h2>
+    <div class="kegiatan-tabs">
+      <button class="kegiatan-tab active" data-kegiatan="lomba">🏆 Lomba Antar Kelas & Jurusan</button>
+      <button class="kegiatan-tab" data-kegiatan="piket">🧹 Piket</button>
+      <button class="kegiatan-tab" data-kegiatan="jumatseni">🎨 Jumat Seni</button>
+    </div>
+
+    <div class="kegiatan-panel active" id="panel-lomba">
+      <div class="album-grid" id="albumLomba">
+        <div class="album-placeholder">📷 belum ada foto — kirim link Google Drive foto lomba, nanti aku pasang di sini.</div>
+      </div>
+    </div>
+    <div class="kegiatan-panel" id="panel-piket">
+      <div class="album-grid" id="albumPiket">
+        <div class="album-placeholder">📷 belum ada foto — kirim link Google Drive foto piket, nanti aku pasang di sini.</div>
+      </div>
+    </div>
+    <div class="kegiatan-panel" id="panel-jumatseni">
+      <div class="album-grid" id="albumJumatSeni">
+        <div class="album-placeholder">📷 belum ada foto — kirim link Google Drive foto Jumat Seni, nanti aku pasang di sini.</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pesan-perpisahan" class="container animate-on-scroll">
+    <div class="eyebrow">node terputus, kenangan tetap tersambung</div>
+    <h2 class="section-title">Untuk Sahabat Kita, Azam Fahurozi</h2>
+    <div class="farewell-card">
+      <div class="farewell-quote-mark">"</div>
+      <p>Terima kasih sudah menjadi bagian dari cerita dan perjalanan kelas ini. Kehadiran, kebersamaan, dan setiap momen seru yang pernah kita lewati bersama tentu akan selalu jadi kenangan manis bagi kita semua.</p>
+      <p>Walaupun sekarang Azam harus mengambil jalan yang berbeda, pintu silaturahmi kita akan selalu terbuka lebar. Terima kasih atas semua kontribusi dan keceriaan yang sudah dibagikan di kelas ini.</p>
+      <p>Semoga di tempat atau langkah yang baru nanti, Azam semakin sukses, lancar dalam mengejar cita-cita, dan selalu dikelilingi hal-hal baik. Jangan pernah ragu untuk melangkah maju, ya!</p>
+      <div class="farewell-signoff">Semangat terus dan sampai jumpa di tangga kesuksesan, Zam! ✨🚀</div>
+      <div class="farewell-status">
+        <span class="node-status" style="position:static;background:var(--amber);box-shadow:0 0 0 3px var(--amber-soft);"></span>
+        dari seluruh keluarga X TJKT 1
+      </div>
+    </div>
+  </section>
+
+  <section id="visi-misi" class="container animate-on-scroll">
+    <div class="eyebrow">arah &amp; tujuan kelas</div>
+    <h2 class="section-title">Visi &amp; Misi Kelas</h2>
+
+    <div class="visi-card">
+      <div class="visi-label">Visi</div>
+      <p class="visi-text">"Mewujudkan kelas 10 TJKT 1 sebagai wadah pembentukan teknisi muda yang kompeten, inovatif, dan berakhlak mulia."</p>
+    </div>
+
+    <div class="misi-grid">
+      <div class="misi-item"><span class="misi-num">01</span><p>Membangun kebiasaan belajar yang efektif dan saling membantu dalam pemahaman materi kejuruan.</p></div>
+      <div class="misi-item"><span class="misi-num">02</span><p>Mengembangkan keterampilan teknis (hard skill) dan kerja sama tim (soft skill) secara seimbang.</p></div>
+      <div class="misi-item"><span class="misi-num">03</span><p>Menjaga kebersihan, kerapihan, dan suasana kelas agar kondusif untuk belajar.</p></div>
+      <div class="misi-item"><span class="misi-num">04</span><p>Menjaga nama baik kelas dan jurusan TJKT melalui prestasi akademik maupun non-akademik.</p></div>
+    </div>
+  </section>
+
+  <section id="struktur" class="container animate-on-scroll">
+    <div class="eyebrow">topologi kelas</div>
+    <h2 class="section-title">Struktur Organisasi Kelas</h2>
+    <div class="mindmap-container">
+      <div class="node">
+        <div class="node-status"></div>
+        <img src="https://ui-avatars.com/api/?name=Aprilia+A&background=16A34A&color=fff&bold=true" class="avatar-img" alt="Wali Kelas">
+        <span class="node-title">Wali Kelas</span>
+        <span class="node-name">Aprilia A. L. A., S.Pd., M.Pd.</span>
+      </div>
+      <div class="connector"></div>
+      <div class="tree-row">
+        <div class="node">
+          <div class="node-status"></div>
+          <img src="https://ui-avatars.com/api/?name=Emogene+Hans&background=0D9467&color=fff&bold=true" class="avatar-img" alt="Ketua Kelas">
+          <span class="node-title">Ketua Kelas</span>
+          <span class="node-name">Emogene Hans Alaric</span>
+        </div>
+        <div class="node">
+          <div class="node-status"></div>
+          <img src="https://ui-avatars.com/api/?name=Marcell+Aditya&background=0D9467&color=fff&bold=true" class="avatar-img" alt="Wakil Ketua">
+          <span class="node-title">Wakil Ketua Kelas</span>
+          <span class="node-name">Marcell Aditya Yusuf</span>
+        </div>
+      </div>
+      <div class="connector"></div>
+      <div class="tree-row">
+        <div class="node">
+          <div class="node-status"></div>
+          <img src="https://ui-avatars.com/api/?name=Azzahra+M&background=A7F3D0&color=0D9467&bold=true" class="avatar-img" alt="Sekretaris">
+          <span class="node-title">Sekretaris</span>
+          <span class="node-name">1. Azzahra Maharani<br>2. Fitri Calista</span>
+        </div>
+        <div class="node">
+          <div class="node-status"></div>
+          <img src="https://ui-avatars.com/api/?name=Aira+Ananda&background=A7F3D0&color=0D9467&bold=true" class="avatar-img" alt="Bendahara">
+          <span class="node-title">Bendahara</span>
+          <span class="node-name">1. Aira Ananda Putri<br>2. Saffa Callista Husna</span>
+        </div>
+        <div class="node">
+          <div class="node-status"></div>
+          <img src="https://ui-avatars.com/api/?name=Safaras+K&background=A7F3D0&color=0D9467&bold=true" class="avatar-img" alt="Keamanan">
+          <span class="node-title">PJ Keamanan</span>
+          <span class="node-name">1. Safaras Akma Fadil<br>2. Dzaki Kamal Siregar</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="container animate-on-scroll">
+    <div class="search-section">
+      <div class="search-row">
+        <span class="search-prompt">$</span>
+        <input type="text" id="searchInput" class="search-input" placeholder="cari nama siswa, absen, hari piket, mapel, atau guru...">
+        <span id="searchCount"></span>
+      </div>
+    </div>
+  </section>
+
+  <section id="daftar-siswa" class="container animate-on-scroll">
+    <div class="eyebrow">33 node terhubung</div>
+    <h2 class="section-title">Daftar Siswa Kelas X TJKT 1</h2>
+    <div class="filter-bar">
+      <button class="filter-chip active" data-filter="all">Semua</button>
+      <button class="filter-chip" data-filter="L">Laki-laki</button>
+      <button class="filter-chip" data-filter="P">Perempuan</button>
+    </div>
+    <div class="siswa-grid" id="siswaContainer"></div>
+    <p class="no-result" id="siswaEmpty">tidak ada siswa yang cocok.</p>
+  </section>
+
+  <section id="pj-piket" class="container animate-on-scroll">
+    <div class="eyebrow">jadwal mingguan</div>
+    <h2 class="section-title">Penanggung Jawab (PJ) Piket</h2>
+    <div class="piket-grid" id="piketContainer"></div>
+  </section>
+
+  <section id="piket-kebersihan" class="container animate-on-scroll">
+    <div class="eyebrow">gotong royong harian</div>
+    <h2 class="section-title">Jadwal Piket Kebersihan Harian</h2>
+    <div class="piket-grid" id="kebersihanContainer"></div>
+  </section>
+
+  <section id="seragam" class="container animate-on-scroll">
+    <div class="eyebrow">dress code mingguan</div>
+    <h2 class="section-title">Jadwal Seragam Harian</h2>
+    <div class="piket-grid" id="seragamContainer"></div>
+  </section>
+
+  <section id="jadwal-pelajaran" class="container animate-on-scroll">
+    <div class="eyebrow">pantau jadwal harian</div>
+    <h2 class="section-title">Jadwal Pelajaran Kelas X TJKT 1</h2>
+    <div class="table-wrapper">
+      <table class="jadwal-table">
+        <thead>
+          <tr>
+            <th style="width:36px;"></th>
+            <th>JAM PERTAMA<small>6:30 - 7:10</small></th>
+            <th>JAM KEDUA<small>7:10 - 7:50</small></th>
+            <th>JAM KETIGA<small>7:50 - 8:30</small></th>
+            <th>JAM KEEMPAT<small>9:00 - 9:40</small></th>
+            <th>JAM KELIMA<small>9:40 - 10:20</small></th>
+            <th>JAM KEENAM<small>10:20 - 11:00</small></th>
+            <th>JAM KETUJUH<small>11:00 - 11:40</small></th>
+            <th>JAM KEDELAPAN<small>12:40 - 13:20</small></th>
+            <th>JAM KESEMBILAN<small>13:20 - 14:00</small></th>
+            <th>JAM KESEPULUH<small>14:00 - 14:40</small></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="jadwal-hari hari-senin">SENIN</td>
+            <td class="jadwal-kosong"></td>
+            <td class="jadwal-kosong"></td>
+            <td colspan="2"><div class="jadwal-isi"><span class="jadwal-guru">Bpk Hasan</span><span class="jadwal-mapel">PKN</span></div></td>
+            <td colspan="3"><div class="jadwal-isi"><span class="jadwal-guru">Ibu Lina</span><span class="jadwal-mapel">IT</span></div></td>
+            <td colspan="3"><div class="jadwal-isi"><span class="jadwal-guru">Ibu Ana</span><span class="jadwal-mapel">IPA</span></div></td>
+          </tr>
+          <tr>
+            <td class="jadwal-hari hari-selasa">SELASA</td>
+            <td colspan="4"><div class="jadwal-isi"><span class="jadwal-guru">Ibu Anastasia</span><span class="jadwal-mapel">DPK1</span></div></td>
+            <td colspan="4"><div class="jadwal-isi"><span class="jadwal-guru">Bpk. Juanda</span><span class="jadwal-mapel">DPK3</span></div></td>
+            <td colspan="2"><div class="jadwal-isi"><span class="jadwal-guru">Mrs. Alya</span><span class="jadwal-mapel">SBK</span></div></td>
+          </tr>
+          <tr>
+            <td class="jadwal-hari hari-rabu">RABU</td>
+            <td colspan="2"><div class="jadwal-isi"><span class="jadwal-guru">Bpk. Adim</span><span class="jadwal-mapel">SUNDA</span></div></td>
+            <td><div class="jadwal-isi"><span class="jadwal-guru">Ibu Redha</span><span class="jadwal-mapel">BK</span></div></td>
+            <td colspan="2"><div class="jadwal-isi"><span class="jadwal-guru">Bpk Minan</span><span class="jadwal-mapel">IND</span></div></td>
+            <td><div class="jadwal-isi"><span class="jadwal-guru">Mrs. Feli</span><span class="jadwal-mapel">MTK</span></div></td>
+            <td colspan="4"><div class="jadwal-isi"><span class="jadwal-guru">Bpk. Ezen</span><span class="jadwal-mapel">PJOK</span></div></td>
+          </tr>
+          <tr>
+            <td class="jadwal-hari hari-kamis">KAMIS</td>
+            <td colspan="4"><div class="jadwal-isi"><span class="jadwal-guru">Ibu Nita</span><span class="jadwal-mapel">DPK2</span></div></td>
+            <td colspan="2"><div class="jadwal-isi"><span class="jadwal-guru">Ms. Wenny</span><span class="jadwal-mapel">ING</span></div></td>
+            <td colspan="2"><div class="jadwal-isi"><span class="jadwal-guru">Bpk Minan</span><span class="jadwal-mapel">IND</span></div></td>
+            <td colspan="2"><div class="jadwal-isi"><span class="jadwal-guru">Bpk Khusni</span><span class="jadwal-mapel">SEJ</span></div></td>
+          </tr>
+          <tr>
+            <td class="jadwal-hari hari-jumat">JUMAT</td>
+            <td colspan="3"><div class="jadwal-isi"><span class="jadwal-guru">Bpk. Dadang</span><span class="jadwal-mapel">PAI</span></div></td>
+            <td colspan="3"><div class="jadwal-isi"><span class="jadwal-guru">Ibu Wini</span><span class="jadwal-mapel">IPS</span></div></td>
+            <td colspan="2"><div class="jadwal-isi"><span class="jadwal-guru">Ms. Wenny</span><span class="jadwal-mapel">ING</span></div></td>
+            <td colspan="2"><div class="jadwal-isi"><span class="jadwal-guru">Mrs. Feli</span><span class="jadwal-mapel">MTK</span></div></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="istirahat-box">
+      <div class="istirahat-chip"><b>Istirahat ke-1 (MBG)</b> 08.30 - 09.00</div>
+      <div class="istirahat-chip"><b>Istirahat ke-2 (ISHOMA)</b> 11.40 - 12.40</div>
+    </div>
+  </section>
+
+  <section id="pj-mapel" class="container animate-on-scroll">
+    <div class="eyebrow">klik header untuk urutkan</div>
+    <h2 class="section-title">Penanggung Jawab (PJ) Mata Pelajaran</h2>
+    <div class="table-wrapper">
+      <table id="pjTable">
+        <thead>
+          <tr>
+            <th data-key="no" width="6%">No <span class="arrow">↕</span></th>
+            <th data-key="name" width="32%">Mata Pelajaran <span class="arrow">↕</span></th>
+            <th data-key="guru" width="28%">Guru Pengampu <span class="arrow">↕</span></th>
+            <th width="34%">Penanggung Jawab (PJ)</th>
+          </tr>
+        </thead>
+        <tbody id="mapelBody"></tbody>
+      </table>
+      <div id="tableCount"></div>
+    </div>
+  </section>
+
+  <section id="informasi" class="container animate-on-scroll">
+    <div class="eyebrow">kontak &amp; identitas</div>
+    <h2 class="section-title">Informasi</h2>
+
+    <div class="info-logos">
+      <div class="info-logo-box">
+        <img src="https://lh3.googleusercontent.com/d/1hi-AdPjbZq4VKj9hDjVUeBgO7fttrwgm" alt="Logo SMKN 4 Kota Bekasi">
+        <span>Logo Sekolah</span>
+      </div>
+      <div class="info-logo-box">
+        <img src="https://lh3.googleusercontent.com/d/1BOu2MCm1vnVpctVd5Om1r1avHVjFb2e_" alt="Logo Kelas X TJKT 1">
+        <span>Logo Kelas</span>
+      </div>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-item">
+        <div class="info-icon">🌐</div>
+        <div><div class="info-label">Web Sekolah</div><div class="info-value"><a href="https://smkn4bekasi.sch.id/#" target="_blank" rel="noopener">smkn4bekasi.sch.id</a></div></div>
+      </div>
+      <div class="info-item">
+        <div class="info-icon">🖥️</div>
+        <div><div class="info-label">Web Kelas</div><div class="info-value muted">Belum tersedia</div></div>
+      </div>
+      <div class="info-item">
+        <div class="info-icon">📸</div>
+        <div><div class="info-label">Instagram Kelas</div><div class="info-value"><a href="https://instagram.com/eexoxt.one" target="_blank" rel="noopener">@eexoxt.one</a></div></div>
+      </div>
+      <div class="info-item">
+        <div class="info-icon">✉️</div>
+        <div><div class="info-label">Email Kelas</div><div class="info-value"><a href="mailto:tkj1.smkn4kotabekasi@gmail.com">tkj1.smkn4kotabekasi@gmail.com</a></div></div>
+      </div>
+      <div class="info-item">
+        <div class="info-icon">🧑‍💻</div>
+        <div><div class="info-label">Email Pembuat Web</div><div class="info-value">
+          <a href="mailto:marcelladitya.msk@yahoo.com">marcelladitya.msk@yahoo.com</a><br>
+          <a href="mailto:accxuing@outlook.co.id">accxuing@outlook.co.id</a>
+        </div></div>
+      </div>
+      <div class="info-item">
+        <div class="info-icon">📍</div>
+        <div><div class="info-label">Alamat Sekolah</div><div class="info-value">
+          <a href="https://www.google.com/search?q=smk+negeri+4+kota+bekasi+alamat" target="_blank" rel="noopener">Jl. Gandaria Jl. Kranggan, RT.001/RW.007, Jatirangga, Kec. Jatisampurna, Kota Bks, Jawa Barat 17434</a>
+        </div></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div class="lightbox-overlay" id="lightboxOverlay">
+  <button class="lightbox-close" id="lightboxClose">✕</button>
+  <img id="lightboxImg" src="" alt="Album Kelas">
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-card">
+    <button class="modal-close" id="modalClose">✕</button>
+    <img id="modalAvatar" class="avatar-img" src="" alt="">
+    <h3 id="modalName"></h3>
+    <div class="modal-meta">
+      <div><span>Node ID</span><b id="modalId"></b></div>
+      <div><span>No. Absen</span><b id="modalAbsen"></b></div>
+      <div><span>Jenis Kelamin</span><b id="modalGender"></b></div>
+      <div><span>Status</span><b style="color:var(--signal-2);">● Online</b></div>
+    </div>
+  </div>
+</div>
+
+<footer>© 2026 X TJKT 1 · SMKN 4 KOTA BEKASI · uptime 100%</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+  /* ---------- DATA ---------- */
+  const albumIds = [
+    "1TaMMHHquH85dpww8gOOAES8T5-_AIYfo",
+    "1xax0ft9ijOZnNtf4ICcG9Oo4CV35uL88",
+    "1jvLkW2u-kUSnpqaIdp_L6GRFtfGYcr4D",
+    "1dzMN3USwwngBqudtnkGif4HjbjmLmmXr",
+    "1nL07HGvQJGBQ8-uAN92EDe6TDqdkdD1J",
+    "1DZUv8_cbXkT7jYhD5_y7eP-fIB6OOcwi",
+    "1fpJv-zUfvJvbHbjgVJd7rm20-6uhrExS",
+    "1PyT19uMYgNW9psgIdRKkO_AYvs23UZbz",
+    "1AyC1K6yq6K8HzJjCfzGnkv1Zz8YTzIu_",
+    "1f9j8_aN6ylRX-VZNQd8zKz_aZE35zRXQ",
+    "1S3MSzwe5bEnSxLyamWJGNFcKLVKa_Bn0",
+    "1RkeDAaB2M4DFBXT3ftIag2So9wRpNpxH",
+    "1kws2au7FF1TEafRXSJAo9144RGLVjPVe"
+  ];
+
+  // Isi array di bawah ini dengan ID file Google Drive kalau fotonya sudah ada
+  // (ambil ID dari link drive.google.com/file/d/ID_DI_SINI/view)
+  const kegiatanIds = {
+    lomba: [],
+    piket: [],
+    jumatseni: []
+  };
+  const siswaList = [
+    ["AIRA ANANDA PUTRI","P"],["ARJUNA BUDI AS-SHODIQ","L"],["AZZAHRA MAHARANI","P"],
+    ["DIKA MAULANA IBRAHIM","L"],["DWI ANANDA AKBAR","L"],["DZAKI KAMAL SIREGAR","L"],
+    ["EMOGENE HANS ALARIC","L"],["FITRI CALISTA","P"],["HAKIM MATTHEW BIMANTARA","L"],
+    ["ILHAM MAULANA","L"],["JOVAN AMADEO DEMARAS","L"],["MARCELL ADITYA YUSUF","L"],
+    ["MUHAMAD RIO ALAMSYAH","L"],["MUHAMMAD ARFAN ARDIANSYAH","L"],["MUHAMMAD FAJRI DWI PUTRA","L"],
+    ["MUHAMMAD HAFIZ PRATAMA","L"],["MUHAMMAD RIFQI AFRIZAL","L"],["NAYLA FITRI AZAHRA","P"],
+    ["RAFA ARDIANSYAH","L"],["RANGGA DAVA ADI TRIYANTO","L"],["RAYHAN RAMADHAN","L"],
+    ["RAZZAN KAMIL ATHAYA ARIANTO","L"],["REYHAN SEPRIANSAH","L"],["RIZKI ADITIA","L"],
+    ["RIZKY ARDIANSYAH","L"],["SAFARAZ AKMA FADIL","L"],["SAFFA CALLISTA HUSNA","P"],
+    ["SANDI","L"],["SIMON HUTABARAT","L"],["SOMA RIYAN AGUSTIN","L"],
+    ["WIANTHI PRATIWI","P"],["ZAINAL ALIMUDIN","L"],["ZIQRI ABDUGHIFARI","L"]
+  ];
+
+  const piketData = [
+    {day:"Senin",   members:["Jovan Amadeo Demaras","Rangga Dava Adi Triyanto"]},
+    {day:"Selasa",  members:["Ziqri Abdughifari","Muhammad Rifqi Afrizal"]},
+    {day:"Rabu",    members:["Zainal Alimudin","Dika Maulana Ibrahim"]},
+    {day:"Kamis",   members:["Simon Hutabarat","Hakim Matthew"]},
+    {day:"Jumat",   members:["Rizky Ardiansyah","Rio Alamsyah"]}
+  ];
+
+  const kebersihanData = [
+    {day:"Senin",   members:["Safaraz Akma Fadil","Muhammad Fajri Dwi Putra","Marcell Aditya Yusuf","Rizky Ardiansyah","Rizki Aditia","Dwi Ananda Akbar","Rangga Dava Adi Triyanto"]},
+    {day:"Selasa",  members:["Muhamad Rio Alamsyah","Razzan Kamil Athaya Arianto","Dika Maulana Ibrahim","Muhammad Arfan Ardiansyah","Muhammad Rifqi Afrizal","Aira Ananda Putri","Wianthi Pratiwi"]},
+    {day:"Rabu",    members:["Sandi","Azzahra Maharani","Ilham Maulana","Fitri Calista","Muhammad Hafiz Pratama","Reyhan Sepriansah"]},
+    {day:"Kamis",   members:["Simon Hutabarat","Ziqri Abdughifari","Rayhan Ramadhan","Dzaki Kamal Siregar","Saffa Callista Husna","Rafa Ardiansyah"]},
+    {day:"Jumat",   members:["Zainal Alimudin","Nayla Fitri Azahra","Hakim Matthew Bimantara","Jovan Amadeo Demaras","Arjuna Budi As-Shodiq","Soma Riyan Agustin","Emogene Hans Alaric"]}
+  ];
+
+  const seragamData = [
+    {day:"Senin",  items:["Baju putih (atas)","Celana panjang putih (bawahan)","Dasi","Topi","Bet","Gesper"]},
+    {day:"Selasa", items:["Baju putih (atas)","Celana abu-abu (bawahan)","Dasi","Bet","Topi","Gesper"]},
+    {day:"Rabu",   items:["Seragam pramuka lengkap","Dasi pramuka"]},
+    {day:"Kamis",  items:["Baju putih (atas)","Celana abu-abu (bawahan)","Dasi","Bet","Topi","Gesper"]},
+    {day:"Jumat",  items:["Baju koko","Celana hitam panjang"], note:"Bagi yang tidak memakai baju koko: seragam putih biasa (seperti Senin) atau kemeja putih polos dan celana hitam."}
+  ];
+
+  const mapelData = [
+    {no:1,icon:"☪️",name:"Pendidikan Agama Islam (PAI)",guru:"Pak Dadang",pj:["Aira Ananda Putri","Muhammad Hafiz Pratama"]},
+    {no:2,icon:"🇮🇩",name:"Pendidikan Pancasila",guru:"Bapak Hasan",pj:["Arjuna Budi As-Shodiq","Nayla Fitri Azahra"]},
+    {no:3,icon:"📖",name:"Bahasa Indonesia",guru:"Bapak Minan",pj:["Azzahra Maharani","Rizky Ardiansyah"]},
+    {no:4,icon:"🇬🇧",name:"Bahasa Inggris",guru:"Ms. Wenny",pj:["Fitri Calista","Rayhan Ramadhan"]},
+    {no:5,icon:"🔢",name:"Matematika",guru:"Mrs. Feli",pj:["Dzaki Kamal Siregar","Saffa Callista Husna"]},
+    {no:6,icon:"🔬",name:"IPA",guru:"Ibu Ana",pj:["Dika Maulana Ibrahim","Wianti Pratiwi"]},
+    {no:7,icon:"🌍",name:"IPS",guru:"Ibu Wini",pj:["Dwi Ananda Akbar","Soma Riyan Agustin"]},
+    {no:8,icon:"🏛️",name:"Sejarah",guru:"Bapak Khusni",pj:["Emogene Hans Alaric","Rangga Dava Adi Triyanto"]},
+    {no:9,icon:"⚽",name:"PJOK",guru:"Bapak Ezen Karim Barasa",pj:["Hakim Matthew Bimantara","Rizky Aditia"]},
+    {no:10,icon:"💬",name:"Bimbingan Konseling (BK)",guru:"Ibu Redha",pj:["Ilham Maulana","Reyhan Sepriansah"]},
+    {no:11,icon:"🎨",name:"Seni Budaya (SBK)",guru:"Mrs. Alya",pj:["Jovan Amadeo Demaras","Razzan Kamil Athaya A."]},
+    {no:12,icon:"🪕",name:"Bahasa Sunda",guru:"Bpk. Adim",pj:["Marcell Aditya Yusuf","Ziqri Abdughifari"]},
+    {no:13,icon:"💻",name:"Informatika (IT)",guru:"Ibu Lina",pj:["Muhammad Rio Alamsyah","Simon Hutabarat"]},
+    {no:14,icon:"⚡",name:"Dasar Keahlian TJKT 1",guru:"Ibu Anastasya Lestari",pj:["M. Arfan Ardiansyah (Diwakilkan)"]},
+    {no:15,icon:"🔌",name:"Dasar Keahlian TJKT 2",guru:"Ibu Asmainita",pj:["Muhammad Fajri Dwi Putra","Rafa Ardiansyah"]},
+    {no:16,icon:"📡",name:"Dasar Keahlian TJKT 3",guru:"Bpk. Juanda",pj:["Safaraz Akma Fadil","Sandi"]}
+  ];
+
+  /* ---------- RENDER ALBUM + LIGHTBOX ---------- */
+  const albumGrid = document.getElementById('albumGrid');
+  albumGrid.innerHTML = albumIds.map((id,idx)=>`
+    <div class="album-item" data-idx="${idx}">
+      <img src="https://lh3.googleusercontent.com/d/${id}" alt="Foto Kelas - ${idx+1}" loading="lazy">
+      <div class="album-overlay"><span>Foto ${idx+1}</span></div>
+    </div>`).join('');
+
+  const lightboxOverlay = document.getElementById('lightboxOverlay');
+  const lightboxImg = document.getElementById('lightboxImg');
+  albumGrid.querySelectorAll('.album-item').forEach(item=>{
+    item.addEventListener('click', ()=>{
+      lightboxImg.src = item.querySelector('img').src;
+      lightboxOverlay.classList.add('show');
+    });
+  });
+  document.getElementById('lightboxClose').addEventListener('click', ()=> lightboxOverlay.classList.remove('show'));
+  lightboxOverlay.addEventListener('click', e=>{ if(e.target===lightboxOverlay) lightboxOverlay.classList.remove('show'); });
+
+  /* ---------- RENDER KEGIATAN KELAS (multi-kategori) + LIGHTBOX ---------- */
+  const kegiatanLabels = { lomba:"Lomba", piket:"Piket", jumatseni:"Jumat Seni" };
+  const kegiatanEmptyMsg = {
+    lomba:"belum ada foto — kirim link Google Drive foto lomba, nanti aku pasang di sini.",
+    piket:"belum ada foto — kirim link Google Drive foto piket, nanti aku pasang di sini.",
+    jumatseni:"belum ada foto — kirim link Google Drive foto Jumat Seni, nanti aku pasang di sini."
+  };
+  const kegiatanGridIds = { lomba:"albumLomba", piket:"albumPiket", jumatseni:"albumJumatSeni" };
+
+  function renderKegiatan(key){
+    const grid = document.getElementById(kegiatanGridIds[key]);
+    const ids = kegiatanIds[key];
+    if(!ids.length){
+      grid.innerHTML = `<div class="album-placeholder">📷 ${kegiatanEmptyMsg[key]}</div>`;
+      return;
+    }
+    grid.innerHTML = ids.map((id,idx)=>`
+      <div class="album-item" data-idx="${idx}">
+        <img src="https://lh3.googleusercontent.com/d/${id}" alt="${kegiatanLabels[key]} - Foto ${idx+1}" loading="lazy">
+        <div class="album-overlay"><span>${kegiatanLabels[key]} · Foto ${idx+1}</span></div>
+      </div>`).join('');
+    grid.querySelectorAll('.album-item').forEach(item=>{
+      item.addEventListener('click', ()=>{
+        lightboxImg.src = item.querySelector('img').src;
+        lightboxOverlay.classList.add('show');
+      });
+    });
+  }
+  Object.keys(kegiatanIds).forEach(renderKegiatan);
+
+  document.querySelectorAll('.kegiatan-tab').forEach(tab=>{
+    tab.addEventListener('click', ()=>{
+      document.querySelectorAll('.kegiatan-tab').forEach(t=>t.classList.remove('active'));
+      document.querySelectorAll('.kegiatan-panel').forEach(p=>p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('panel-'+tab.dataset.kegiatan).classList.add('active');
+    });
+  });
+
+  /* ---------- BOOT SEQUENCE ---------- */
+  const bootMsgs = [
+    "Menghubungkan ke jaringan SMKN 4 Kota Bekasi ...",
+    "Mengautentikasi kelas X TJKT 1 ...",
+    "Memuat 33 node siswa ...",
+    "Menyinkronkan jadwal piket & PJ mapel ...",
+    "Koneksi stabil. Status: ONLINE."
+  ];
+  const bootEl = document.getElementById('bootLines');
+  const boot = document.getElementById('boot');
+  let bootDone = false;
+
+  function finishBoot(){
+    if(bootDone) return;
+    bootDone = true;
+    boot.classList.add('fade');
+    document.body.classList.remove('no-scroll');
+    setTimeout(()=>{ boot.style.display='none'; }, 550);
+  }
+
+  bootMsgs.forEach((msg,i)=>{
+    const line = document.createElement('div');
+    line.className='line';
+    line.style.animation = `fadeIn .35s ease forwards ${i*0.35}s`;
+    line.innerHTML = `<span class="ok">[OK]</span><span>${msg}</span>`;
+    bootEl.appendChild(line);
+  });
+  const cursorLine = document.createElement('div');
+  cursorLine.className='line';
+  cursorLine.style.animation = `fadeIn .35s ease forwards ${bootMsgs.length*0.35}s`;
+  cursorLine.innerHTML = `<span class="cursor"></span>`;
+  bootEl.appendChild(cursorLine);
+
+  boot.addEventListener('click', finishBoot);
+  setTimeout(finishBoot, bootMsgs.length*350 + 900);
+
+  /* ---------- THEME TOGGLE ---------- */
+  const themeBtn = document.getElementById('themeToggle');
+  themeBtn.addEventListener('click', ()=>{
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    document.documentElement.setAttribute('data-theme', isDark ? '' : 'dark');
+    themeBtn.textContent = isDark ? '🌙' : '☀️';
+  });
+
+  /* ---------- LIVE CLOCK ---------- */
+  function tickClock(){
+    const d = new Date();
+    document.getElementById('liveClock').textContent = d.toLocaleTimeString('id-ID',{hour12:false});
+  }
+  tickClock(); setInterval(tickClock,1000);
+
+  /* ---------- SCROLL PROGRESS ---------- */
+  window.addEventListener('scroll', ()=>{
+    const h = document.documentElement;
+    const pct = (h.scrollTop)/((h.scrollHeight-h.clientHeight)||1)*100;
+    document.getElementById('progress').style.width = pct+'%';
+  });
+
+  /* ---------- RENDER SISWA ---------- */
+  const siswaContainer = document.getElementById('siswaContainer');
+  function renderSiswa(){
+    siswaContainer.innerHTML = siswaList.map(([nama,gender],idx)=>{
+      const no = String(idx+1).padStart(2,'0');
+      const photoUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(nama)}&background=EDF3EF&color=0D9467&bold=true`;
+      return `
+        <div class="siswa-card search-target" data-gender="${gender}" data-name="${nama}" data-no="${no}" data-idx="${idx}">
+          <img src="${photoUrl}" class="avatar-img" alt="${nama}">
+          <span class="absen-badge">Absen ${no}</span>
+          <span class="student-name">${nama}</span>
+          <span class="gender-tag">${gender === 'P' ? 'Perempuan' : 'Laki-laki'}</span>
+        </div>`;
+    }).join('');
+    siswaContainer.querySelectorAll('.siswa-card').forEach(card=>{
+      card.addEventListener('click', ()=> openModal(card.dataset));
+    });
+  }
+  renderSiswa();
+
+  /* filter chips */
+  document.querySelectorAll('.filter-chip').forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+      chip.classList.add('active');
+      const f = chip.dataset.filter;
+      document.querySelectorAll('#siswaContainer .siswa-card').forEach(card=>{
+        const show = f==='all' || card.dataset.gender===f;
+        card.style.display = show ? '' : 'none';
+      });
+    });
+  });
+
+  /* modal */
+  const modalOverlay = document.getElementById('modalOverlay');
+  function openModal(d){
+    document.getElementById('modalAvatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(d.name)}&background=DCFCE7&color=0D9467&bold=true&size=128`;
+    document.getElementById('modalName').textContent = d.name;
+    document.getElementById('modalId').textContent = `TJKT1-${d.no}`;
+    document.getElementById('modalAbsen').textContent = d.no;
+    document.getElementById('modalGender').textContent = d.gender==='P' ? 'Perempuan' : 'Laki-laki';
+    modalOverlay.classList.add('show');
+  }
+  document.getElementById('modalClose').addEventListener('click', ()=> modalOverlay.classList.remove('show'));
+  modalOverlay.addEventListener('click', e=>{ if(e.target===modalOverlay) modalOverlay.classList.remove('show'); });
+
+  /* ---------- RENDER PIKET (highlight today) ---------- */
+  const dayMap = {1:"Senin",2:"Selasa",3:"Rabu",4:"Kamis",5:"Jumat"};
+  const todayName = dayMap[new Date().getDay()] || null;
+  const piketContainer = document.getElementById('piketContainer');
+  piketContainer.innerHTML = piketData.map(p=>{
+    const isToday = p.day === todayName;
+    return `
+      <div class="piket-card search-target ${isToday?'today':''}">
+        ${isToday ? '<span class="today-flag">HARI INI</span>' : ''}
+        <span class="piket-day">${p.day}</span>
+        <ul class="piket-members">
+          ${p.members.map(m=>`<li class="piket-member-item"><span class="dot-icon"></span>${m}</li>`).join('')}
+        </ul>
+      </div>`;
+  }).join('');
+
+  /* ---------- RENDER PIKET KEBERSIHAN (highlight today) ---------- */
+  const kebersihanContainer = document.getElementById('kebersihanContainer');
+  kebersihanContainer.innerHTML = kebersihanData.map(p=>{
+    const isToday = p.day === todayName;
+    return `
+      <div class="piket-card search-target ${isToday?'today':''}">
+        ${isToday ? '<span class="today-flag">HARI INI</span>' : ''}
+        <span class="piket-day">${p.day}</span>
+        <ul class="piket-members">
+          ${p.members.map(m=>`<li class="piket-member-item"><span class="dot-icon"></span>${m}</li>`).join('')}
+        </ul>
+      </div>`;
+  }).join('');
+
+  /* ---------- RENDER SERAGAM (highlight today) ---------- */
+  const seragamContainer = document.getElementById('seragamContainer');
+  seragamContainer.innerHTML = seragamData.map(p=>{
+    const isToday = p.day === todayName;
+    return `
+      <div class="piket-card search-target ${isToday?'today':''}">
+        ${isToday ? '<span class="today-flag">HARI INI</span>' : ''}
+        <span class="piket-day">${p.day}</span>
+        <ul class="piket-members">
+          ${p.items.map(m=>`<li class="piket-member-item"><span class="dot-icon"></span>${m}</li>`).join('')}
+        </ul>
+        ${p.note ? `<div class="seragam-note">${p.note}</div>` : ''}
+      </div>`;
+  }).join('');
+
+  /* ---------- RENDER MAPEL TABLE + SORT ---------- */
+  const mapelBody = document.getElementById('mapelBody');
+  let sortKey = 'no', sortDir = 1;
+
+  function renderMapel(){
+    const data = [...mapelData].sort((a,b)=>{
+      let va=a[sortKey], vb=b[sortKey];
+      if(typeof va === 'string'){ va=va.toLowerCase(); vb=vb.toLowerCase(); }
+      if(va<vb) return -1*sortDir;
+      if(va>vb) return 1*sortDir;
+      return 0;
+    });
+    mapelBody.innerHTML = data.map(m=>`
+      <tr class="search-target">
+        <td>${m.no}</td>
+        <td><div class="mapel-name"><span>${m.icon}</span><b>${m.name}</b></div></td>
+        <td>${m.guru}</td>
+        <td><div class="pj-list">${m.pj.map(p=>`<div class="pj-item"><span class="pj-avatar"></span>${p}</div>`).join('')}</div></td>
+      </tr>`).join('');
+    document.getElementById('tableCount').textContent = `${data.length} mata pelajaran`;
+  }
+  renderMapel();
+
+  document.querySelectorAll('#pjTable th[data-key]').forEach(th=>{
+    th.addEventListener('click', ()=>{
+      const key = th.dataset.key;
+      sortDir = (sortKey===key) ? sortDir*-1 : 1;
+      sortKey = key;
+      document.querySelectorAll('#pjTable th').forEach(h=>h.classList.remove('sorted'));
+      th.classList.add('sorted');
+      th.querySelector('.arrow').textContent = sortDir===1 ? '↑' : '↓';
+      renderMapel();
+      applySearch(document.getElementById('searchInput').value);
+    });
+  });
+
+  /* ---------- MENU DROPDOWN ---------- */
+  const menuBtn = document.getElementById('menuBtn');
+  const dropdownMenu = document.getElementById('dropdownMenu');
+  menuBtn.addEventListener('click', e=>{ e.stopPropagation(); dropdownMenu.classList.toggle('show'); });
+  document.querySelectorAll('.dropdown-item').forEach(item=>{
+    if(!item.getAttribute('target')) item.addEventListener('click', ()=> dropdownMenu.classList.remove('show'));
+  });
+  document.addEventListener('click', e=>{
+    if(!dropdownMenu.contains(e.target) && !menuBtn.contains(e.target)) dropdownMenu.classList.remove('show');
+  });
+
+  /* ---------- SCROLL REVEAL ---------- */
+  const revealObserver = new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{ if(entry.isIntersecting) entry.target.classList.add('active'); });
+  },{threshold:.08});
+  document.querySelectorAll('.animate-on-scroll').forEach(el=>revealObserver.observe(el));
+
+  /* ---------- LIVE SEARCH (with highlight) ---------- */
+  function clearHighlights(root){
+    root.querySelectorAll('mark').forEach(m=>{
+      m.replaceWith(document.createTextNode(m.textContent));
+    });
+  }
+  function highlightText(el, term){
+    if(!term) return;
+    el.childNodes.forEach(node=>{
+      if(node.nodeType===3){
+        const idx = node.textContent.toLowerCase().indexOf(term);
+        if(idx>-1){
+          const span = document.createElement('span');
+          const before = node.textContent.slice(0,idx);
+          const match = node.textContent.slice(idx, idx+term.length);
+          const after = node.textContent.slice(idx+term.length);
+          span.innerHTML = `${before}<mark>${match}</mark>${after}`;
+          node.replaceWith(...span.childNodes);
+        }
+      } else if(node.nodeType===1 && node.tagName!=='MARK'){
+        highlightText(node, term);
+      }
+    });
+  }
+
+  function applySearch(rawTerm){
+    const term = rawTerm.toLowerCase().trim();
+    const targets = document.querySelectorAll('.search-target');
+    let visible = 0;
+    targets.forEach(card=>{
+      clearHighlights(card);
+      const text = card.textContent.toLowerCase();
+      const match = text.includes(term);
+      card.style.display = match ? '' : 'none';
+      if(match){ visible++; if(term) highlightText(card, term); }
+    });
+    document.getElementById('searchCount').textContent = term ? `${visible} hasil` : '';
+    document.getElementById('siswaEmpty').style.display =
+      (document.querySelectorAll('#siswaContainer .siswa-card[style*="display: none"]').length === siswaList.length) ? 'block' : 'none';
+  }
+
+  document.getElementById('searchInput').addEventListener('input', e=> applySearch(e.target.value));
+});
+</script>
+</body>
+</html>
